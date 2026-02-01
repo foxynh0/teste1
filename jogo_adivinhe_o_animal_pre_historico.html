@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Adivinhe o Animal Pré-histórico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .game {
+      background: #1c1c1c;
+      padding: 20px 25px;
+      border-radius: 10px;
+      width: 360px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    h1 {
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .period {
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #4caf50;
+      color: #000;
+      font-weight: bold;
+    }
+    .hint, .message {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .hint {
+      color: #ffd54f;
+    }
+    .message.success {
+      color: #4caf50;
+    }
+    .message.error {
+      color: #ff5252;
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>Adivinhe o animal</h1>
+    <div class="period" id="period"></div>
+
+    <input type="text" id="guess" placeholder="Digite o nome do animal" />
+    <button onclick="checkGuess()">Confirmar palpite</button>
+
+    <div class="hint" id="hint"></div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const animals = [
+      {
+        name: "plateossauro",
+        period: "Triássico",
+        hints: [
+          "Era um animal grande e quadrúpede",
+          "Alimentava-se de plantas",
+          "Seu nome começa com: PLA",
+          "Era um réptil"
+        ]
+      },
+      {
+        name: "estegossauro",
+        period: "Jurássico",
+        hints: [
+          "Possuía placas nas costas",
+          "Era herbívoro",
+          "Seu nome começa com: EST",
+          "Era um réptil"
+        ]
+      },
+      {
+        name: "tiranossauro",
+        period: "Cretáceo",
+        hints: [
+          "Tinha dentes grandes e afiados",
+          "Era carnívoro",
+          "Seu nome começa com: TIR",
+          "Era um réptil"
+        ]
+      }
+    ];
+
+    let animal = animals[Math.floor(Math.random() * animals.length)];
+    let errors = 0;
+
+    document.getElementById("period").innerText = `Período: ${animal.period}`;
+
+    function checkGuess() {
+      const input = document.getElementById("guess");
+      const message = document.getElementById("message");
+      const hint = document.getElementById("hint");
+
+      const guess = input.value.toLowerCase().trim();
+
+      if (!guess) return;
+
+      if (guess === animal.name) {
+        message.innerText = "✔️ Você acertou!";
+        message.className = "message success";
+        hint.innerText = "";
+        input.disabled = true;
+      } else {
+        message.innerText = "❌ Palpite errado";
+        message.className = "message error";
+
+        if (errors < animal.hints.length) {
+          hint.innerText = "Dica: " + animal.hints[errors];
+        } else {
+          hint.innerText = "Sem mais dicas disponíveis";
+        }
+        errors++;
+      }
+
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
